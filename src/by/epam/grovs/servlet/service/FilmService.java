@@ -5,6 +5,7 @@ import by.epam.grovs.servlet.entity.Film;
 
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Optional;
 
 public class FilmService {
 
@@ -17,7 +18,7 @@ public class FilmService {
         return INSTANCE;
     }
 
-    public List<Film> getByFilmId(Long id){
+    public Optional<Film> getByFilmId(Long id){
 
 
             return FilmDao.getInstance().findOne( id);

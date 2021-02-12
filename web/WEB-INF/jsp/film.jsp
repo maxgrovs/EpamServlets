@@ -15,7 +15,7 @@
 <div>
 
     <span>${requestScope.film.name} </span>
-    <span>${requestScope.film.year}</span>
+    <span>${requestScope.film.id}</span>
 
 </div>
 

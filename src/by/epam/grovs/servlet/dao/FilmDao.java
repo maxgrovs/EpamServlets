@@ -9,6 +9,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class FilmDao {
 
@@ -23,9 +24,9 @@ public class FilmDao {
 
     public static final String FIND_FILMS = "SELECT * FROM film_storage.film WHERE id = ?";
 
-    public List<Film> findOne(Long id){
+    public Optional<Film> findOne(Long id){
 
-        List<Film> films = new ArrayList<>();
+        Optional<Film> film = null;
 
         try (Connection connection = ConnectionManager.get()) {
 
@@ -37,21 +38,21 @@ public class FilmDao {
 
             while (resultSet.next()) {
 
-                Film film = Film.builder()
+                 film = Optional.ofNullable(Film.builder()
 
-                        .id(resultSet.getLong("id"))
-                        .name(resultSet.getString("name"))
-                        .year(resultSet.getInt("year"))
-                        .build();
+                         .id(resultSet.getLong("id"))
+                         .name(resultSet.getString("name"))
+                         .year(resultSet.getInt("year"))
+                         .build());
 
-                films.add(film);
+
             }
 
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
 
-        return films;
+        return film;
 
     }
 }

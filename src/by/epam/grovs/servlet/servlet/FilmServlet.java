@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
 
 @WebServlet("/film")
 public class FilmServlet extends HttpServlet {
@@ -17,18 +18,26 @@ public class FilmServlet extends HttpServlet {
     FilmService filmService = FilmService.getInstance();
 
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) {
 
         String id = req.getParameter("id");
 
-        List<Film> byFilmId = filmService.getByFilmId(Long.valueOf(id));
+        Optional<Film> byFilmId = filmService.getByFilmId(Long.valueOf(id));
 
         resp.setContentType("text/html");
 
-        for (Film film : byFilmId) {
-           // resp.getWriter().printf("<h1>%d %s %d",film.getId(), film.getName(), film.getYear());
-            resp.getWriter().println(film.getName());
-        }
+        byFilmId.ifPresent(film -> {
+            Film film1 = byFilmId.get();
+
+            try {
+                resp.getWriter().println(film1.getName());
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+        });
+
 
     }
 }
