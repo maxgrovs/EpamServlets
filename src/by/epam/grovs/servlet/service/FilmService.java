@@ -20,11 +20,13 @@ public class FilmService {
 
     public Optional<Film> getByFilmId(Long id){
 
-
             return FilmDao.getInstance().findOne( id);
-
-
     }
 
+    public Film save(Film film){
+
+        return FilmDao.getInstance().save(film);
+
+    }
 
 }

@@ -3,10 +3,7 @@ package by.epam.grovs.servlet.dao;
 import by.epam.grovs.servlet.entity.Film;
 import by.epam.grovs.servlet.util.ConnectionManager;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -23,6 +20,29 @@ public class FilmDao {
     }
 
     public static final String FIND_FILMS = "SELECT * FROM film_storage.film WHERE id = ?";
+    public static final String SAVE = "INSERT INTO film_storage.film (name) VALUES (?)";
+
+    public Film save(Film film){
+
+        try (Connection connection = ConnectionManager.get()) {
+
+            PreparedStatement preparedStatement = connection.prepareStatement(SAVE, Statement.RETURN_GENERATED_KEYS);
+
+            preparedStatement.setString(1, film.getName());
+
+            preparedStatement.executeUpdate();
+            ResultSet generatedKeys = preparedStatement.getGeneratedKeys();
+
+            if (generatedKeys.next()){
+                film.setId(generatedKeys.getLong(1));
+            }
+
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+
+        return film;
+    }
 
     public Optional<Film> findOne(Long id){
 
@@ -55,4 +75,7 @@ public class FilmDao {
         return film;
 
     }
+
+
+
 }
